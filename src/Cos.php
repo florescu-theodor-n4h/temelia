@@ -176,4 +176,63 @@ class Cos
         }
         return round($kg, 2);
     }
+
+    /**
+     * Calculeaza rezumatul financiar al cosului: subtotal, reducerea
+     * din cuponul aplicat, costul livrarii (prin shim-ul de curierat)
+     * si totalul de plata.
+     *
+     * Un cupon devenit invalid (expirat, sub pragul minim) este eliminat
+     * automat din sesiune, iar motivul este returnat in 'mesaj_cupon'.
+     *
+     * @param array  $linii         Rezultatul metodei linii().
+     * @param string $metodaLivrare 'curier' sau 'ridicare'.
+     * @param string $judet         Judetul de livrare (gol = estimare).
+     * @param string $metodaPlata   'ramburs' sau 'card'.
+     * @return array
+     */
+    public static function rezumat(array $linii, $metodaLivrare = 'curier', $judet = '', $metodaPlata = 'ramburs')
+    {
+        $subtotal = Calculator::subtotal($linii);
+        $cupon = null;
+        $reducere = 0.0;
+        $mesajCupon = '';
+
+        if (!empty($_SESSION['cupon'])) {
+            $candidat = Cupoane::dupaCod($_SESSION['cupon']);
+            $rezultat = Calculator::aplicaCupon($candidat, $subtotal);
+            if ($rezultat['valid']) {
+                $cupon = $candidat;
+                $reducere = $rezultat['reducere'];
+            } else {
+                $mesajCupon = $rezultat['mesaj'];
+                unset($_SESSION['cupon']);
+            }
+        }
+
+        $costLivrare = 0.0;
+        $zileLivrare = 0;
+        $estimare = false;
+        if ($metodaLivrare === 'curier' && !empty($linii)) {
+            $estimare = ($judet === '');
+            $raspuns = CurierShim::tarif($estimare ? 'Bucuresti' : $judet, self::greutate($linii),
+                Calculator::total($subtotal, $reducere, 0), $metodaPlata === 'ramburs');
+            if (!empty($raspuns['succes'])) {
+                $costLivrare = (float) $raspuns['tarif'];
+                $zileLivrare = (int) $raspuns['zile_livrare'];
+            }
+        }
+
+        return array(
+            'subtotal'     => $subtotal,
+            'reducere'     => $reducere,
+            'cupon'        => $cupon,
+            'mesaj_cupon'  => $mesajCupon,
+            'cost_livrare' => $costLivrare,
+            'zile_livrare' => $zileLivrare,
+            'estimare'     => $estimare,
+            'total'        => Calculator::total($subtotal, $reducere, $costLivrare),
+            'tva'          => Calculator::tvaInclus(Calculator::total($subtotal, $reducere, $costLivrare), config('cota_tva')),
+        );
+    }
 }
