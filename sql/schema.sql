@@ -1,55 +1,57 @@
 -- =====================================================================
 --  TEMELIA Materiale de Constructii S.R.L.
---  Schema bazei de date PostgreSQL pentru magazinul online.
+--  Schema PORTABILA a bazei de date (SQLite / PostgreSQL / MySQL).
 --
---  Fisierul poate fi rulat de mai multe ori: tabelele existente sunt
---  sterse in ordinea inversa a dependentelor si recreate.
+--  Schema foloseste doar elemente SQL standard, acceptate de toate cele
+--  trei motoare. Singura diferenta - definirea cheii primare cu
+--  autoincrementare - este exprimata prin marcajul {PK}, inlocuit de
+--  scriptul sql/instalare.php in functie de driverul configurat:
+--     sqlite -> INTEGER PRIMARY KEY AUTOINCREMENT
+--     pgsql  -> SERIAL PRIMARY KEY
+--     mysql  -> INT AUTO_INCREMENT PRIMARY KEY
 --
 --  Conventii:
 --    - denumirile tabelelor si coloanelor sunt in limba romana;
 --    - toate preturile sunt exprimate in RON si INCLUD TVA (21%);
---    - sumele monetare folosesc tipul NUMERIC(12,2) pentru precizie.
+--    - valorile logice sunt stocate ca SMALLINT (0 = nu, 1 = da);
+--    - datele calendaristice sunt generate de aplicatie (Y-m-d H:i:s).
+--
+--  Fiecare instructiune se termina cu ';' la final de linie; scriptul de
+--  instalare imparte fisierul dupa aceasta regula.
 -- =====================================================================
 
-BEGIN;
-
-DROP TABLE IF EXISTS tranzactii_plata      CASCADE;
-DROP TABLE IF EXISTS istoric_status        CASCADE;
-DROP TABLE IF EXISTS comenzi_produse       CASCADE;
-DROP TABLE IF EXISTS comenzi               CASCADE;
-DROP TABLE IF EXISTS cupoane               CASCADE;
-DROP TABLE IF EXISTS recenzii              CASCADE;
-DROP TABLE IF EXISTS favorite              CASCADE;
-DROP TABLE IF EXISTS produse_asociate      CASCADE;
-DROP TABLE IF EXISTS specificatii          CASCADE;
-DROP TABLE IF EXISTS produse               CASCADE;
-DROP TABLE IF EXISTS categorii             CASCADE;
-DROP TABLE IF EXISTS utilizatori           CASCADE;
+DROP TABLE IF EXISTS tranzactii_plata;
+DROP TABLE IF EXISTS istoric_status;
+DROP TABLE IF EXISTS comenzi_produse;
+DROP TABLE IF EXISTS comenzi;
+DROP TABLE IF EXISTS cupoane;
+DROP TABLE IF EXISTS recenzii;
+DROP TABLE IF EXISTS favorite;
+DROP TABLE IF EXISTS produse_asociate;
+DROP TABLE IF EXISTS specificatii;
+DROP TABLE IF EXISTS produse;
+DROP TABLE IF EXISTS categorii;
+DROP TABLE IF EXISTS utilizatori;
 
 -- ---------------------------------------------------------------------
 --  Utilizatori: clienti si administratori.
 --  Parola este stocata exclusiv sub forma de hash (password_hash/bcrypt).
 -- ---------------------------------------------------------------------
 CREATE TABLE utilizatori (
-    id            SERIAL PRIMARY KEY,
+    id            {PK},
     nume          VARCHAR(120) NOT NULL,
     email         VARCHAR(160) NOT NULL UNIQUE,
     parola_hash   VARCHAR(255) NOT NULL,
     telefon       VARCHAR(20),
-    adresa        VARCHAR(255),
-    oras          VARCHAR(80),
-    judet         VARCHAR(40),
-    cod_postal    VARCHAR(10),
-    rol           VARCHAR(10)  NOT NULL DEFAULT 'client'
-                  CHECK (rol IN ('client', 'admin')),
-    creat_la      TIMESTAMP    NOT NULL DEFAULT NOW()
+    rol           VARCHAR(10)  NOT NULL DEFAULT 'client' CHECK (rol IN ('client', 'admin')),
+    creat_la      VARCHAR(19)  NOT NULL
 );
 
 -- ---------------------------------------------------------------------
 --  Categorii de produse (raioane).
 -- ---------------------------------------------------------------------
 CREATE TABLE categorii (
-    id          SERIAL PRIMARY KEY,
+    id          {PK},
     nume        VARCHAR(100) NOT NULL,
     slug        VARCHAR(100) NOT NULL UNIQUE,
     descriere   TEXT,
@@ -61,32 +63,31 @@ CREATE TABLE categorii (
 --  pretul curent, indica o reducere afisata cu pretul vechi taiat.
 -- ---------------------------------------------------------------------
 CREATE TABLE produse (
-    id            SERIAL PRIMARY KEY,
-    categorie_id  INTEGER       NOT NULL REFERENCES categorii(id) ON DELETE RESTRICT,
+    id            {PK},
+    categorie_id  INTEGER       NOT NULL REFERENCES categorii(id),
     cod_sku       VARCHAR(40)   NOT NULL UNIQUE,
     nume          VARCHAR(200)  NOT NULL,
     slug          VARCHAR(200)  NOT NULL UNIQUE,
-    descriere     TEXT          NOT NULL DEFAULT '',
+    descriere     TEXT          NOT NULL,
     pret          NUMERIC(12,2) NOT NULL CHECK (pret >= 0),
-    pret_vechi    NUMERIC(12,2)          CHECK (pret_vechi IS NULL OR pret_vechi >= 0),
+    pret_vechi    NUMERIC(12,2),
     stoc          INTEGER       NOT NULL DEFAULT 0 CHECK (stoc >= 0),
     unitate       VARCHAR(30)   NOT NULL DEFAULT 'buc',
-    greutate_kg   NUMERIC(8,2)  NOT NULL DEFAULT 1 CHECK (greutate_kg >= 0),
+    greutate_kg   NUMERIC(8,2)  NOT NULL DEFAULT 1,
     imagine       VARCHAR(255),
-    recomandat    BOOLEAN       NOT NULL DEFAULT FALSE,
-    activ         BOOLEAN       NOT NULL DEFAULT TRUE,
-    creat_la      TIMESTAMP     NOT NULL DEFAULT NOW()
+    recomandat    SMALLINT      NOT NULL DEFAULT 0,
+    activ         SMALLINT      NOT NULL DEFAULT 1,
+    creat_la      VARCHAR(19)   NOT NULL
 );
 
 CREATE INDEX idx_produse_categorie ON produse(categorie_id);
-CREATE INDEX idx_produse_nume      ON produse(LOWER(nume));
 
 -- ---------------------------------------------------------------------
 --  Specificatii tehnice (putere, tensiune, dimensiuni, material ...).
 --  Folosite pe pagina produsului si in comparatorul de produse.
 -- ---------------------------------------------------------------------
 CREATE TABLE specificatii (
-    id         SERIAL PRIMARY KEY,
+    id         {PK},
     produs_id  INTEGER      NOT NULL REFERENCES produse(id) ON DELETE CASCADE,
     nume       VARCHAR(80)  NOT NULL,
     valoare    VARCHAR(160) NOT NULL,
@@ -101,17 +102,16 @@ CREATE INDEX idx_specificatii_produs ON specificatii(produs_id);
 CREATE TABLE produse_asociate (
     produs_id   INTEGER NOT NULL REFERENCES produse(id) ON DELETE CASCADE,
     asociat_id  INTEGER NOT NULL REFERENCES produse(id) ON DELETE CASCADE,
-    PRIMARY KEY (produs_id, asociat_id),
-    CHECK (produs_id <> asociat_id)
+    PRIMARY KEY (produs_id, asociat_id)
 );
 
 -- ---------------------------------------------------------------------
 --  Lista de favorite a clientilor autentificati (A9).
 -- ---------------------------------------------------------------------
 CREATE TABLE favorite (
-    utilizator_id  INTEGER   NOT NULL REFERENCES utilizatori(id) ON DELETE CASCADE,
-    produs_id      INTEGER   NOT NULL REFERENCES produse(id)     ON DELETE CASCADE,
-    adaugat_la     TIMESTAMP NOT NULL DEFAULT NOW(),
+    utilizator_id  INTEGER     NOT NULL REFERENCES utilizatori(id) ON DELETE CASCADE,
+    produs_id      INTEGER     NOT NULL REFERENCES produse(id)     ON DELETE CASCADE,
+    adaugat_la     VARCHAR(19) NOT NULL,
     PRIMARY KEY (utilizator_id, produs_id)
 );
 
@@ -119,12 +119,12 @@ CREATE TABLE favorite (
 --  Recenzii: un client poate evalua o singura data un produs cumparat.
 -- ---------------------------------------------------------------------
 CREATE TABLE recenzii (
-    id             SERIAL PRIMARY KEY,
-    produs_id      INTEGER   NOT NULL REFERENCES produse(id)     ON DELETE CASCADE,
-    utilizator_id  INTEGER   NOT NULL REFERENCES utilizatori(id) ON DELETE CASCADE,
-    nota           SMALLINT  NOT NULL CHECK (nota BETWEEN 1 AND 5),
-    comentariu     TEXT      NOT NULL DEFAULT '',
-    creat_la       TIMESTAMP NOT NULL DEFAULT NOW(),
+    id             {PK},
+    produs_id      INTEGER     NOT NULL REFERENCES produse(id)     ON DELETE CASCADE,
+    utilizator_id  INTEGER     NOT NULL REFERENCES utilizatori(id) ON DELETE CASCADE,
+    nota           SMALLINT    NOT NULL CHECK (nota BETWEEN 1 AND 5),
+    comentariu     TEXT        NOT NULL,
+    creat_la       VARCHAR(19) NOT NULL,
     UNIQUE (produs_id, utilizator_id)
 );
 
@@ -134,16 +134,16 @@ CREATE TABLE recenzii (
 --    tip = 'valoare' -> valoare reprezinta o suma fixa in RON
 -- ---------------------------------------------------------------------
 CREATE TABLE cupoane (
-    id               SERIAL PRIMARY KEY,
+    id               {PK},
     cod              VARCHAR(30)   NOT NULL UNIQUE,
     descriere        VARCHAR(200)  NOT NULL DEFAULT '',
     tip              VARCHAR(10)   NOT NULL CHECK (tip IN ('procent', 'valoare')),
     valoare          NUMERIC(12,2) NOT NULL CHECK (valoare > 0),
     minim_comanda    NUMERIC(12,2) NOT NULL DEFAULT 0,
-    valabil_pana     DATE,
+    valabil_pana     VARCHAR(10),
     utilizari_max    INTEGER,
     utilizari        INTEGER       NOT NULL DEFAULT 0,
-    activ            BOOLEAN       NOT NULL DEFAULT TRUE
+    activ            SMALLINT      NOT NULL DEFAULT 1
 );
 
 -- ---------------------------------------------------------------------
@@ -151,7 +151,7 @@ CREATE TABLE cupoane (
 --  documentul sa ramana valabil chiar daca contul este modificat.
 -- ---------------------------------------------------------------------
 CREATE TABLE comenzi (
-    id              SERIAL PRIMARY KEY,
+    id              {PK},
     numar           VARCHAR(20)   NOT NULL UNIQUE,
     utilizator_id   INTEGER       REFERENCES utilizatori(id) ON DELETE SET NULL,
     nume_client     VARCHAR(120)  NOT NULL,
@@ -171,11 +171,11 @@ CREATE TABLE comenzi (
     total           NUMERIC(12,2) NOT NULL,
     cod_cupon       VARCHAR(30),
     awb             VARCHAR(30),
-    observatii      TEXT          NOT NULL DEFAULT '',
+    observatii      TEXT          NOT NULL,
     status          VARCHAR(20)   NOT NULL DEFAULT 'noua'
                     CHECK (status IN ('noua', 'confirmata', 'expediata', 'livrata', 'anulata')),
-    creat_la        TIMESTAMP     NOT NULL DEFAULT NOW(),
-    actualizat_la   TIMESTAMP     NOT NULL DEFAULT NOW()
+    creat_la        VARCHAR(19)   NOT NULL,
+    actualizat_la   VARCHAR(19)   NOT NULL
 );
 
 CREATE INDEX idx_comenzi_utilizator ON comenzi(utilizator_id);
@@ -187,7 +187,7 @@ CREATE INDEX idx_comenzi_status     ON comenzi(status);
 --  afecteaza).
 -- ---------------------------------------------------------------------
 CREATE TABLE comenzi_produse (
-    id            SERIAL PRIMARY KEY,
+    id            {PK},
     comanda_id    INTEGER       NOT NULL REFERENCES comenzi(id) ON DELETE CASCADE,
     produs_id     INTEGER       REFERENCES produse(id) ON DELETE SET NULL,
     nume_produs   VARCHAR(200)  NOT NULL,
@@ -203,11 +203,11 @@ CREATE INDEX idx_comenzi_produse_comanda ON comenzi_produse(comanda_id);
 --  Istoricul modificarilor de status (trasabilitate).
 -- ---------------------------------------------------------------------
 CREATE TABLE istoric_status (
-    id          SERIAL PRIMARY KEY,
-    comanda_id  INTEGER     NOT NULL REFERENCES comenzi(id) ON DELETE CASCADE,
-    status      VARCHAR(20) NOT NULL,
+    id          {PK},
+    comanda_id  INTEGER      NOT NULL REFERENCES comenzi(id) ON DELETE CASCADE,
+    status      VARCHAR(20)  NOT NULL,
     nota        VARCHAR(255) NOT NULL DEFAULT '',
-    creat_la    TIMESTAMP   NOT NULL DEFAULT NOW()
+    creat_la    VARCHAR(19)  NOT NULL
 );
 
 -- ---------------------------------------------------------------------
@@ -215,14 +215,12 @@ CREATE TABLE istoric_status (
 --  Nu se stocheaza NICIODATA numarul complet al cardului sau CVV-ul.
 -- ---------------------------------------------------------------------
 CREATE TABLE tranzactii_plata (
-    id           SERIAL PRIMARY KEY,
-    comanda_id   INTEGER       NOT NULL REFERENCES comenzi(id) ON DELETE CASCADE,
-    referinta    VARCHAR(40)   NOT NULL UNIQUE,
-    suma         NUMERIC(12,2) NOT NULL,
-    stare        VARCHAR(20)   NOT NULL,
-    mesaj        VARCHAR(255)  NOT NULL DEFAULT '',
-    card_ultimele4 VARCHAR(4),
-    creat_la     TIMESTAMP     NOT NULL DEFAULT NOW()
+    id              {PK},
+    comanda_id      INTEGER       NOT NULL REFERENCES comenzi(id) ON DELETE CASCADE,
+    referinta       VARCHAR(40)   NOT NULL UNIQUE,
+    suma            NUMERIC(12,2) NOT NULL,
+    stare           VARCHAR(20)   NOT NULL,
+    mesaj           VARCHAR(255)  NOT NULL DEFAULT '',
+    card_ultimele4  VARCHAR(4),
+    creat_la        VARCHAR(19)   NOT NULL
 );
-
-COMMIT;
