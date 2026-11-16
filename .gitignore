@@ -10,3 +10,7 @@ jurnal/*.log
 *.swp
 .DS_Store
 Thumbs.db
+
+# Fisierul bazei de date SQLite (se genereaza cu sql/instalare.php)
+date/*.sqlite
+date/*.sqlite-*

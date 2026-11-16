@@ -26,13 +26,17 @@ $config = array(
         'program'    => 'Luni - Vineri 08:00 - 18:00, Sambata 08:00 - 14:00',
     ),
 
-    // Conexiunea la baza de date PostgreSQL
+    // Conexiunea la baza de date (aplicatia este independenta de motorul SQL).
+    //   'sqlite' - implicit, un singur fisier, nu necesita server;
+    //   'pgsql'  - PostgreSQL;  'mysql' - MySQL / MariaDB.
     'db' => array(
+        'driver' => 'sqlite',
+        'fisier' => dirname(__DIR__) . '/date/temelia.sqlite',
         'host'   => '127.0.0.1',
-        'port'   => '5432',
+        'port'   => '',
         'nume'   => 'temelia',
         'user'   => 'temelia',
-        'parola' => 'temelia',
+        'parola' => '',
     ),
 
     // Adresa de baza a site-ului, fara bara finala (ex. https://temelia.example.ro)
@@ -68,6 +72,8 @@ if (is_file($fisierLocal)) {
 
 // Suprascrierea din variabile de mediu (prioritate maxima)
 $harta = array(
+    'TEMELIA_DB_DRIVER' => array('db', 'driver'),
+    'TEMELIA_DB_FISIER' => array('db', 'fisier'),
     'TEMELIA_DB_HOST'   => array('db', 'host'),
     'TEMELIA_DB_PORT'   => array('db', 'port'),
     'TEMELIA_DB_NUME'   => array('db', 'nume'),
