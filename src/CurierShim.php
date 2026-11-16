@@ -184,7 +184,7 @@ class CurierShim
         if (!preg_match('/^RC(\d{8})\d{6}$/', $awb, $m)) {
             return array('succes' => false, 'cod' => 404, 'mesaj' => 'AWB inexistent.');
         }
-        $emis = DateTime::createFromFormat('Ymd H:i', $m[1] . ' 09:00');
+        $emis = DateTime::createFromFormat('Ymd H:i', $m[1] . ' 00:00');
         if (!$emis) {
             return array('succes' => false, 'cod' => 404, 'mesaj' => 'AWB inexistent.');
         }
