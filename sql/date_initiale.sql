@@ -2,12 +2,12 @@
 --  TEMELIA Materiale de Constructii S.R.L.
 --  Date initiale: categorii, produse, specificatii, accesorii, cupoane.
 --
+--  Fisierul contine doar SQL standard (portabil SQLite/PostgreSQL/MySQL).
+--
 --  Conturile de utilizator (administrator si client de test) NU sunt
 --  definite aici, deoarece parolele trebuie generate cu password_hash();
 --  ele sunt create de scriptul sql/instalare.php.
 -- =====================================================================
-
-BEGIN;
 
 -- ---------------------------------------------------------------------
 --  Categorii (raioane)
@@ -26,87 +26,87 @@ INSERT INTO categorii (id, nume, slug, descriere, ordine) VALUES
 INSERT INTO produse (id, categorie_id, cod_sku, nume, slug, descriere, pret, pret_vechi, stoc, unitate, greutate_kg, imagine, recomandat, creat_la) VALUES
 (1, 1, 'TM-SC-001', 'Masina de gaurit cu percutie 750W', 'masina-gaurit-percutie-750w',
  'Masina de gaurit cu percutie, ideala pentru gaurire in beton, caramida, lemn si metal. Mandrina cu cheie de 13 mm, reglaj electronic al turatiei si functie de inversare a sensului de rotatie. Livrata cu maner auxiliar si limitator de adancime.',
- 289.90, 349.90, 25, 'buc', 2.10, 'masina-gaurit-percutie-750w.svg', TRUE, NOW() - INTERVAL '40 days'),
+ 289.90, 349.90, 25, 'buc', 2.10, 'masina-gaurit-percutie-750w.svg', 1, '2026-10-07 10:00:00'),
 (2, 1, 'TM-SC-002', 'Autofiletanta cu acumulator 18V 2Ah', 'autofiletanta-acumulator-18v',
  'Autofiletanta compacta cu acumulator Li-Ion 18V, doua trepte de viteza si 21 de pozitii de cuplu. Iluminare LED a zonei de lucru. Pachetul include acumulator 2Ah, incarcator si valiza de transport.',
- 459.00, NULL, 14, 'buc', 1.60, 'autofiletanta-acumulator-18v.svg', TRUE, NOW() - INTERVAL '10 days'),
+ 459.00, NULL, 14, 'buc', 1.60, 'autofiletanta-acumulator-18v.svg', 1, '2026-11-06 10:00:00'),
 (3, 1, 'TM-SC-003', 'Set burghie beton SDS-Plus 8 piese', 'set-burghie-beton-sds-8',
  'Set de 8 burghie pentru beton cu prindere SDS-Plus, diametre 5-12 mm, varf din carbura de wolfram. Compatibile cu masini de gaurit cu percutie si ciocane rotopercutoare.',
- 64.90, NULL, 80, 'set', 0.45, 'set-burghie-beton-sds-8.svg', FALSE, NOW() - INTERVAL '60 days'),
+ 64.90, NULL, 80, 'set', 0.45, 'set-burghie-beton-sds-8.svg', 0, '2026-09-17 10:00:00'),
 (4, 1, 'TM-SC-004', 'Acumulator Li-Ion 18V 4Ah', 'acumulator-li-ion-18v-4ah',
  'Acumulator de schimb Li-Ion 18V cu capacitate de 4Ah si indicator de nivel al incarcarii. Compatibil cu intreaga gama de scule cu acumulator 18V comercializate de TEMELIA.',
- 219.00, NULL, 30, 'buc', 0.65, 'acumulator-li-ion-18v-4ah.svg', FALSE, NOW() - INTERVAL '25 days'),
+ 219.00, NULL, 30, 'buc', 0.65, 'acumulator-li-ion-18v-4ah.svg', 0, '2026-10-22 10:00:00'),
 (5, 1, 'TM-SC-005', 'Ciocan de dulgher 600 g', 'ciocan-dulgher-600g',
  'Ciocan de dulgher din otel forjat cu coada din fibra de sticla si manson anti-vibratii. Capat cu gheara pentru extragerea cuielor.',
- 39.90, NULL, 60, 'buc', 0.80, 'ciocan-dulgher-600g.svg', FALSE, NOW() - INTERVAL '90 days'),
+ 39.90, NULL, 60, 'buc', 0.80, 'ciocan-dulgher-600g.svg', 0, '2026-08-18 10:00:00'),
 
 (6, 2, 'TM-MC-001', 'Ciment Portland CEM II/A-S 42,5R - sac 40 kg', 'ciment-portland-cem-ii-40kg',
  'Ciment Portland compozit cu zgura, clasa de rezistenta 42,5R, recomandat pentru betoane, mortare si sape. Ambalat in saci de 40 kg. Se vinde la bucata (sac); pentru cantitati de peste 50 de saci va rugam sa solicitati oferta de paletizare.',
- 34.50, NULL, 500, 'sac 40 kg', 40.00, 'ciment-portland-cem-ii-40kg.svg', TRUE, NOW() - INTERVAL '120 days'),
+ 34.50, NULL, 500, 'sac 40 kg', 40.00, 'ciment-portland-cem-ii-40kg.svg', 1, '2026-07-19 10:00:00'),
 (7, 2, 'TM-MC-002', 'Adeziv flexibil gresie si faianta C2TE - 25 kg', 'adeziv-flexibil-c2te-25kg',
  'Adeziv flexibil pe baza de ciment, clasa C2TE, pentru placi ceramice si gresie portelanata, la interior si exterior. Timp deschis extins si alunecare redusa.',
- 52.90, 59.90, 220, 'sac 25 kg', 25.00, 'adeziv-flexibil-c2te-25kg.svg', FALSE, NOW() - INTERVAL '35 days'),
+ 52.90, 59.90, 220, 'sac 25 kg', 25.00, 'adeziv-flexibil-c2te-25kg.svg', 0, '2026-10-12 10:00:00'),
 (8, 2, 'TM-MC-003', 'Vata minerala bazaltica 10 cm - pachet 6 mp', 'vata-minerala-bazaltica-10cm',
  'Placi din vata minerala bazaltica pentru izolarea termica si fonica a peretilor, mansardelor si planseelor. Clasa de reactie la foc A1 (incombustibil).',
- 129.00, NULL, 90, 'pachet 6 mp', 12.00, 'vata-minerala-bazaltica-10cm.svg', FALSE, NOW() - INTERVAL '15 days'),
+ 129.00, NULL, 90, 'pachet 6 mp', 12.00, 'vata-minerala-bazaltica-10cm.svg', 0, '2026-11-01 10:00:00'),
 (9, 2, 'TM-MC-004', 'Polistiren expandat EPS 80 - 5 cm, pachet 10 mp', 'polistiren-eps80-5cm',
  'Placi de polistiren expandat EPS 80 pentru termoizolarea fatadelor. Dimensiune placa 1000 x 500 mm, grosime 5 cm.',
- 89.00, NULL, 120, 'pachet 10 mp', 4.00, 'polistiren-eps80-5cm.svg', FALSE, NOW() - INTERVAL '50 days'),
+ 89.00, NULL, 120, 'pachet 10 mp', 4.00, 'polistiren-eps80-5cm.svg', 0, '2026-09-27 10:00:00'),
 (10, 2, 'TM-MC-005', 'Bloc BCA 625 x 250 x 200 mm', 'bloc-bca-625x250x200',
  'Bloc din beton celular autoclavizat pentru zidarie portanta si de compartimentare. Usor, bun izolator termic si simplu de prelucrat.',
- 14.20, NULL, 1500, 'buc', 18.00, 'bloc-bca-625x250x200.svg', FALSE, NOW() - INTERVAL '200 days'),
+ 14.20, NULL, 1500, 'buc', 18.00, 'bloc-bca-625x250x200.svg', 0, '2026-04-30 10:00:00'),
 
 (11, 3, 'TM-IE-001', 'Cablu MYYM 3 x 2,5 mmp - colac 100 m', 'cablu-myym-3x2-5-100m',
  'Cablu flexibil cu conductori din cupru si izolatie PVC, 3 x 2,5 mmp, pentru circuite de prize. Comercializat in colac de 100 m.',
- 349.00, 399.00, 40, 'colac 100 m', 12.00, 'cablu-myym-3x2-5-100m.svg', TRUE, NOW() - INTERVAL '20 days'),
+ 349.00, 399.00, 40, 'colac 100 m', 12.00, 'cablu-myym-3x2-5-100m.svg', 1, '2026-10-27 10:00:00'),
 (12, 3, 'TM-IE-002', 'Priza dubla cu impamantare, alba', 'priza-dubla-impamantare-alba',
  'Priza dubla Schuko cu impamantare si protectie pentru copii, montaj ingropat, 16A / 250V.',
- 18.50, NULL, 300, 'buc', 0.15, 'priza-dubla-impamantare-alba.svg', FALSE, NOW() - INTERVAL '70 days'),
+ 18.50, NULL, 300, 'buc', 0.15, 'priza-dubla-impamantare-alba.svg', 0, '2026-09-07 10:00:00'),
 (13, 3, 'TM-IE-003', 'Intrerupator simplu, alb', 'intrerupator-simplu-alb',
  'Intrerupator simplu pentru montaj ingropat, 10A / 250V, rama inclusa.',
- 12.90, NULL, 280, 'buc', 0.10, 'intrerupator-simplu-alb.svg', FALSE, NOW() - INTERVAL '70 days'),
+ 12.90, NULL, 280, 'buc', 0.10, 'intrerupator-simplu-alb.svg', 0, '2026-09-07 10:00:00'),
 (14, 3, 'TM-IE-004', 'Siguranta automata 1P 16A curba C', 'siguranta-automata-1p-16a',
  'Intreruptor automat monopolar 16A, curba de declansare C, capacitate de rupere 6 kA, montaj pe sina DIN.',
- 24.90, NULL, 150, 'buc', 0.12, 'siguranta-automata-1p-16a.svg', FALSE, NOW() - INTERVAL '5 days'),
+ 24.90, NULL, 150, 'buc', 0.12, 'siguranta-automata-1p-16a.svg', 0, '2026-11-11 10:00:00'),
 
 (15, 4, 'TM-IS-001', 'Teava PPR 20 mm PN20 - bara 4 m', 'teava-ppr-20mm-4m',
  'Teava din polipropilena PPR PN20 pentru instalatii de apa calda si rece. Imbinare prin termofuziune.',
- 11.90, NULL, 600, 'bara 4 m', 0.70, 'teava-ppr-20mm-4m.svg', FALSE, NOW() - INTERVAL '100 days'),
+ 11.90, NULL, 600, 'bara 4 m', 0.70, 'teava-ppr-20mm-4m.svg', 0, '2026-08-08 10:00:00'),
 (16, 4, 'TM-IS-002', 'Baterie lavoar monocomanda, crom', 'baterie-lavoar-monocomanda-crom',
  'Baterie pentru lavoar cu cartus ceramic de 35 mm, aerator economizor de apa si finisaj cromat. Furtunuri flexibile incluse.',
- 189.00, 229.00, 35, 'buc', 1.40, 'baterie-lavoar-monocomanda-crom.svg', TRUE, NOW() - INTERVAL '8 days'),
+ 189.00, 229.00, 35, 'buc', 1.40, 'baterie-lavoar-monocomanda-crom.svg', 1, '2026-11-08 10:00:00'),
 (17, 4, 'TM-IS-003', 'Set fitinguri PPR 20 mm - 30 piese', 'set-fitinguri-ppr-20mm',
  'Set de fitinguri PPR 20 mm: coturi, teuri, mufe si adaptoare filetate. Ideal pentru reparatii si instalatii noi.',
- 69.00, NULL, 70, 'set', 0.90, 'set-fitinguri-ppr-20mm.svg', FALSE, NOW() - INTERVAL '45 days'),
+ 69.00, NULL, 70, 'set', 0.90, 'set-fitinguri-ppr-20mm.svg', 0, '2026-10-02 10:00:00'),
 (18, 4, 'TM-IS-004', 'Robinet coltar 1/2" x 3/8"', 'robinet-coltar-1-2-3-8',
  'Robinet coltar cromat pentru racordarea bateriilor si rezervoarelor WC, cu rozeta inclusa.',
- 22.50, NULL, 200, 'buc', 0.20, 'robinet-coltar-1-2-3-8.svg', FALSE, NOW() - INTERVAL '45 days'),
+ 22.50, NULL, 200, 'buc', 0.20, 'robinet-coltar-1-2-3-8.svg', 0, '2026-10-02 10:00:00'),
 
 (19, 5, 'TM-VD-001', 'Vopsea lavabila interior alba - 15 L', 'vopsea-lavabila-interior-15l',
  'Vopsea lavabila mata pentru pereti si tavane interioare, putere mare de acoperire si rezistenta la spalare. Consum aproximativ 1 L la 10 mp per strat.',
- 179.00, 215.00, 60, 'galeata 15 L', 22.00, 'vopsea-lavabila-interior-15l.svg', TRUE, NOW() - INTERVAL '12 days'),
+ 179.00, 215.00, 60, 'galeata 15 L', 22.00, 'vopsea-lavabila-interior-15l.svg', 1, '2026-11-04 10:00:00'),
 (20, 5, 'TM-VD-002', 'Trafalet microfibra 25 cm cu maner', 'trafalet-microfibra-25cm',
  'Trafalet din microfibra pentru vopsele lavabile, latime 25 cm, cu maner ergonomic si filet pentru prelungitor.',
- 29.90, NULL, 140, 'buc', 0.35, 'trafalet-microfibra-25cm.svg', FALSE, NOW() - INTERVAL '30 days'),
+ 29.90, NULL, 140, 'buc', 0.35, 'trafalet-microfibra-25cm.svg', 0, '2026-10-17 10:00:00'),
 (21, 5, 'TM-VD-003', 'Set pensule pentru vopsit - 3 bucati', 'set-pensule-vopsit-3',
  'Set de 3 pensule plate (25, 50 si 75 mm) cu peri sintetici, potrivite pentru vopsele pe baza de apa si solvent.',
- 24.50, NULL, 110, 'set', 0.25, 'set-pensule-vopsit-3.svg', FALSE, NOW() - INTERVAL '30 days'),
+ 24.50, NULL, 110, 'set', 0.25, 'set-pensule-vopsit-3.svg', 0, '2026-10-17 10:00:00'),
 (22, 5, 'TM-VD-004', 'Banda de mascare 48 mm x 50 m', 'banda-mascare-48mm',
  'Banda adeziva de hartie pentru mascare, se indeparteaza fara urme in maximum 7 zile de la aplicare.',
- 9.90, NULL, 0, 'rola', 0.20, 'banda-mascare-48mm.svg', FALSE, NOW() - INTERVAL '30 days'),
+ 9.90, NULL, 0, 'rola', 0.20, 'banda-mascare-48mm.svg', 0, '2026-10-17 10:00:00'),
 
 (23, 6, 'TM-GE-001', 'Furtun de gradina 1/2" - 25 m', 'furtun-gradina-25m',
  'Furtun de gradina din PVC armat cu 3 straturi, rezistent la UV si rasucire. Lungime 25 m, diametru 1/2".',
- 79.90, NULL, 45, 'colac 25 m', 3.20, 'furtun-gradina-25m.svg', FALSE, NOW() - INTERVAL '3 days'),
+ 79.90, NULL, 45, 'colac 25 m', 3.20, 'furtun-gradina-25m.svg', 0, '2026-11-13 10:00:00'),
 (24, 6, 'TM-GE-002', 'Lopata cu coada din lemn', 'lopata-coada-lemn',
  'Lopata din otel calit cu coada din lemn de fag, lungime totala 145 cm, pentru sapat si manipulare materiale.',
- 54.90, NULL, 50, 'buc', 2.00, 'lopata-coada-lemn.svg', FALSE, NOW() - INTERVAL '150 days'),
+ 54.90, NULL, 50, 'buc', 2.00, 'lopata-coada-lemn.svg', 0, '2026-06-19 10:00:00'),
 (25, 6, 'TM-GE-003', 'Set unelte de gradinarit - 5 piese', 'set-unelte-gradinarit-5',
  'Set de 5 unelte de mana pentru gradinarit (lopatica, grebla, sapalija, plantator, foarfeca) intr-o geanta de depozitare.',
- 99.00, 129.00, 25, 'set', 1.50, 'set-unelte-gradinarit-5.svg', TRUE, NOW() - INTERVAL '6 days'),
+ 99.00, 129.00, 25, 'set', 1.50, 'set-unelte-gradinarit-5.svg', 1, '2026-11-10 10:00:00'),
 (26, 6, 'TM-GE-004', 'Pistol de stropit multifunctional', 'pistol-stropit-multifunctional',
  'Pistol de stropit cu 7 moduri de pulverizare si sistem de prindere rapida, compatibil cu furtunurile de 1/2".',
- 34.90, NULL, 70, 'buc', 0.30, 'pistol-stropit-multifunctional.svg', FALSE, NOW() - INTERVAL '3 days');
+ 34.90, NULL, 70, 'buc', 0.30, 'pistol-stropit-multifunctional.svg', 0, '2026-11-13 10:00:00');
 
 -- ---------------------------------------------------------------------
 --  Specificatii tehnice
@@ -161,13 +161,8 @@ INSERT INTO produse_asociate (produs_id, asociat_id) VALUES
 -- ---------------------------------------------------------------------
 --  Coduri de reducere (A8)
 -- ---------------------------------------------------------------------
-INSERT INTO cupoane (cod, descriere, tip, valoare, minim_comanda, valabil_pana, utilizari_max, activ) VALUES
-('BINEVENIT10', 'Reducere de 10% la prima comanda',            'procent', 10,  0,   NULL,         NULL, TRUE),
-('SANTIER50',   'Reducere de 50 RON la comenzi peste 500 RON', 'valoare', 50,  500, NULL,         100,  TRUE),
-('VARA2024',    'Campanie de vara 2024 (expirata)',            'procent', 15,  0,   '2024-08-31', NULL, TRUE);
+INSERT INTO cupoane (cod, descriere, tip, valoare, minim_comanda, valabil_pana, utilizari_max, utilizari, activ) VALUES
+('BINEVENIT10', 'Reducere de 10% la prima comanda',            'procent', 10,  0,   NULL,         NULL, 0, 1),
+('SANTIER50',   'Reducere de 50 RON la comenzi peste 500 RON', 'valoare', 50,  500, NULL,         100,  0, 1),
+('VARA2024',    'Campanie de vara 2024 (expirata)',            'procent', 15,  0,   '2024-08-31', NULL, 0, 1);
 
--- Sincronizarea secventelor dupa inserarea cu identificatori expliciti
-SELECT setval('categorii_id_seq', (SELECT MAX(id) FROM categorii));
-SELECT setval('produse_id_seq',   (SELECT MAX(id) FROM produse));
-
-COMMIT;
