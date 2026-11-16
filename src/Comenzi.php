@@ -108,7 +108,7 @@ class Comenzi
      * O comanda anulata nu mai poate fi reactivata.
      *
      * @param int    $id
-     * @param string $status Cod din staturi_comanda().
+     * @param string $status Cod din statusuri_comanda().
      * @param string $nota   Observatie optionala a administratorului.
      * @return void
      * @throws RuntimeException
@@ -182,7 +182,7 @@ class Comenzi
         Baza::insereaza('istoric_status', array(
             'comanda_id' => (int) $comandaId,
             'status'     => $status,
-            'nota'       => mb_substr($nota, 0, 255, 'UTF-8'),
+            'nota'       => function_exists('mb_substr') ? mb_substr($nota, 0, 255, 'UTF-8') : substr($nota, 0, 255),
             'creat_la'   => Baza::acum(),
         ));
     }
