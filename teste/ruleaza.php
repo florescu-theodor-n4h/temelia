@@ -164,7 +164,7 @@ verifica(!$r['aprobata'], 'CVV invalid respins');
 
 grup('Shim curier RapidCurier');
 egal(19.99, CurierShim::calculeazaTarif('Cluj', 3, 100, false), 'Colet de 3 kg: tarif de baza');
-egal(26.11, CurierShim::calculeazaTarif('Cluj', 10, 100, true), 'Colet de 10 kg cu ramburs: 19,99 + 5 x 1,20 + 4,99');
+egal(30.98, CurierShim::calculeazaTarif('Cluj', 10, 100, true), 'Colet de 10 kg cu ramburs: 19,99 + 5 x 1,20 + 4,99 = 30,98');
 egal(15.99, CurierShim::calculeazaTarif('Dolj', 3, 100, false), 'Livrare locala in Dolj: reducere 20%');
 egal(0.0, CurierShim::calculeazaTarif('Iasi', 50, 1600, true), 'Livrare gratuita peste 1.500 lei');
 verifica(CurierShim::calculeazaTarif('Iasi', 800, 2000, false) > 150, 'Transportul paletizat (800 kg) nu este gratuit si include suprataxa');
