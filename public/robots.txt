@@ -1,0 +1,9 @@
+# Instructiuni pentru motoarele de cautare
+User-agent: *
+Disallow: /admin/
+Disallow: /cont/
+Disallow: /api/
+Disallow: /cos.php
+Disallow: /finalizare.php
+Disallow: /plata.php
+Sitemap: /sitemap.php
