@@ -1,0 +1,376 @@
+/*
+ * =====================================================================
+ *  TEMELIA Materiale de Constructii - foaie de stil principala
+ *  Stil "enterprise" clasic: fonturi Verdana/Tahoma, panouri cu chenar,
+ *  bare de titlu in degrade si tabele cu linii alternante.
+ *  Adaptare pentru telefoane mobile la final (sectiunea RESPONSIVE).
+ * =====================================================================
+ */
+
+/* ---------- Elemente de baza ---------- */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #c9d1dc url(../img/fundal.gif) repeat;
+    color: #1d1d1d;
+    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 1.45;
+}
+a { color: #123f8c; }
+a:visited { color: #3d2f7a; }
+a:hover { color: #d35d00; }
+img { border: 0; max-width: 100%; height: auto; }
+h1, h2, h3, h4 { font-family: Tahoma, Verdana, Arial, sans-serif; color: #1f3a68; margin: 0 0 8px 0; }
+h1 { font-size: 18px; border-bottom: 2px solid #e8730c; padding-bottom: 4px; }
+h2 { font-size: 15px; }
+h3 { font-size: 13px; }
+p { margin: 0 0 10px 0; }
+hr { border: 0; border-top: 1px solid #a9b4c4; margin: 12px 0; }
+small, .mic { font-size: 10px; color: #555; }
+
+/* ---------- Containerul paginii ---------- */
+#pagina {
+    width: 980px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #ffffff;
+    border-left: 1px solid #7d8ba0;
+    border-right: 1px solid #7d8ba0;
+    box-sizing: border-box;
+}
+
+/* ---------- Bara superioara ---------- */
+#bara-sus {
+    background: #1b2c4a;
+    color: #c8d3e6;
+    font-size: 10px;
+    padding: 3px 10px;
+    text-align: right;
+}
+#bara-sus a { color: #ffffff; text-decoration: none; margin-left: 10px; }
+#bara-sus a:hover { text-decoration: underline; }
+#bara-sus .stanga { float: left; }
+
+/* ---------- Antet ---------- */
+#antet {
+    background: #f4f6f9 url(../img/antet-degrade.gif) repeat-x;
+    border-bottom: 1px solid #7d8ba0;
+    padding: 10px;
+    overflow: hidden;
+}
+#antet .sigla { float: left; }
+#antet .sigla img { display: block; }
+#antet .cautare {
+    float: right;
+    margin-top: 12px;
+    text-align: right;
+}
+#antet .cautare input.text { width: 220px; }
+#antet .cos-rapid {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 4px 8px;
+    background: #fff7e6;
+    border: 1px solid #e8a04c;
+    font-weight: bold;
+}
+
+/* ---------- Meniul principal ---------- */
+#meniu {
+    background: #2a4a80;
+    border-top: 1px solid #4b6ba3;
+    border-bottom: 3px solid #e8730c;
+    margin: 0;
+    padding: 0 6px;
+    list-style: none;
+    overflow: hidden;
+}
+#meniu li { float: left; }
+#meniu a {
+    display: block;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 11px;
+    text-decoration: none;
+    padding: 7px 10px;
+    border-right: 1px solid #1f3a68;
+    border-left: 1px solid #3c5f99;
+}
+#meniu a:hover, #meniu a.activ { background: #e8730c; border-left-color: #f39a48; }
+
+/* ---------- Cale de navigare ---------- */
+.cale {
+    font-size: 10px;
+    color: #555;
+    padding: 5px 10px;
+    background: #eef1f5;
+    border-bottom: 1px solid #d3d9e2;
+}
+
+/* ---------- Coloane ---------- */
+#continut { overflow: hidden; padding: 10px; }
+#coloana-stanga { float: left; width: 200px; margin-right: 12px; }
+#coloana-principala { overflow: hidden; }
+.latime-intreaga { width: auto; }
+
+/* ---------- Casete (panouri) ---------- */
+.caseta {
+    border: 1px solid #8fa0b8;
+    background: #f7f9fb;
+    margin-bottom: 12px;
+}
+.caseta .titlu {
+    background: #3a5a91 url(../img/titlu-degrade.gif) repeat-x;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-bottom: 1px solid #1f3a68;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.caseta .corp { padding: 8px; }
+.caseta ul.lista { margin: 0; padding: 0; list-style: none; }
+.caseta ul.lista li { border-bottom: 1px dotted #b6c1d1; padding: 4px 0 4px 12px; background: url(../img/sageata.gif) no-repeat 0 8px; }
+.caseta ul.lista li.activ a { font-weight: bold; color: #d35d00; }
+
+/* ---------- Banner pagina principala ---------- */
+.banner {
+    background: #fff4e5;
+    border: 1px solid #e8a04c;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+.banner h2 { color: #b34f00; font-size: 17px; }
+
+/* ---------- Grila de produse ---------- */
+.grila-produse { overflow: hidden; margin: 0 -5px; }
+.produs-card {
+    float: left;
+    width: 25%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.produs-card .interior {
+    border: 1px solid #b6c1d1;
+    background: #ffffff;
+    padding: 6px;
+    text-align: center;
+    min-height: 290px;
+    position: relative;
+}
+.produs-card .interior:hover { border-color: #e8730c; }
+.produs-card img { width: 140px; height: 105px; }
+.produs-card .nume { display: block; height: 46px; overflow: hidden; font-weight: bold; margin: 4px 0; }
+.produs-card .eticheta-reducere {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: #c40000;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 2px 5px;
+}
+
+/* ---------- Preturi ---------- */
+.pret { color: #c40000; font-weight: bold; font-size: 14px; }
+.pret-mare { color: #c40000; font-weight: bold; font-size: 22px; }
+.pret-vechi { color: #777; text-decoration: line-through; font-size: 11px; }
+.reducere { color: #ffffff; background: #c40000; padding: 1px 4px; font-weight: bold; font-size: 11px; }
+.tva { font-size: 10px; color: #555; }
+
+/* ---------- Stoc ---------- */
+.stoc-da { color: #1b7a1b; font-weight: bold; }
+.stoc-putin { color: #c77700; font-weight: bold; }
+.stoc-nu { color: #b00000; font-weight: bold; }
+
+/* ---------- Butoane ---------- */
+.buton, input.buton, button.buton {
+    display: inline-block;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #1d1d1d;
+    background: #e6e9ee url(../img/buton-degrade.gif) repeat-x;
+    border: 1px solid #7d8ba0;
+    border-top-color: #b6c1d1;
+    border-left-color: #b6c1d1;
+    padding: 4px 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.buton:hover { background: #d6dce6; color: #1d1d1d; }
+.buton-principal, input.buton-principal, button.buton-principal {
+    background: #e8730c;
+    color: #ffffff;
+    border: 1px solid #a54f00;
+    border-top-color: #f5a55a;
+    border-left-color: #f5a55a;
+}
+.buton-principal:hover { background: #cf6200; color: #ffffff; }
+.buton-pericol { background: #b00000; color: #ffffff; border-color: #700000; }
+.buton-pericol:hover { background: #8a0000; color: #ffffff; }
+.buton[disabled], .buton.inactiv { color: #8a8a8a; background: #eeeeee; border-color: #c4c4c4; cursor: not-allowed; }
+.buton-link { background: none; border: 0; color: #123f8c; text-decoration: underline; cursor: pointer; font: inherit; padding: 0; }
+form.in-linie { display: inline; margin: 0; }
+
+/* ---------- Formulare ---------- */
+input.text, select, textarea {
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+    font-size: 12px;
+    border: 1px solid #7d8ba0;
+    border-right-color: #c4ccd8;
+    border-bottom-color: #c4ccd8;
+    padding: 3px;
+    background: #ffffff;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+input.text:focus, select:focus, textarea:focus { background: #fffbe6; border-color: #e8730c; }
+input.scurt { width: 70px; }
+input.mediu, select.mediu { width: 200px; }
+input.lung, select.lung, textarea.lung { width: 100%; }
+table.formular { width: 100%; border-collapse: collapse; }
+table.formular th { text-align: right; vertical-align: top; width: 170px; padding: 5px 8px 5px 0; font-weight: normal; color: #333; }
+table.formular td { padding: 4px 0; }
+.obligatoriu { color: #c40000; font-weight: bold; }
+.eroare-camp { display: block; color: #b00000; font-size: 11px; }
+.camp-eroare { border-color: #b00000 !important; background: #fff0f0 !important; }
+fieldset { border: 1px solid #a9b4c4; margin: 0 0 12px 0; padding: 8px 10px; }
+legend { font-weight: bold; color: #1f3a68; padding: 0 4px; }
+
+/* ---------- Tabele de date ---------- */
+table.date { width: 100%; border-collapse: collapse; border: 1px solid #8fa0b8; margin-bottom: 10px; }
+table.date th {
+    background: #dfe5ee;
+    color: #1f3a68;
+    text-align: left;
+    font-size: 11px;
+    padding: 5px 6px;
+    border: 1px solid #a9b4c4;
+}
+table.date td { padding: 5px 6px; border: 1px solid #ccd4df; vertical-align: middle; }
+table.date tr.impar td { background: #f3f6fa; }
+table.date tr:hover td { background: #fff7e6; }
+table.date td.numar, table.date th.numar { text-align: right; white-space: nowrap; }
+table.date tfoot td { background: #eef1f5; font-weight: bold; }
+table.date img { width: 50px; height: 38px; }
+.tabel-derulant { overflow-x: auto; }
+
+/* ---------- Mesaje ---------- */
+.mesaj { padding: 7px 10px; margin-bottom: 10px; border: 1px solid; font-weight: bold; }
+.mesaj-succes { background: #e9f7e4; border-color: #6aa84f; color: #22561b; }
+.mesaj-eroare { background: #fdeaea; border-color: #c94040; color: #8a0000; }
+.mesaj-info { background: #e8f0fb; border-color: #6d8fc7; color: #1f3a68; }
+.mesaj ul { margin: 4px 0 0 18px; padding: 0; font-weight: normal; }
+
+/* ---------- Etichete status comanda ---------- */
+.status { display: inline-block; padding: 1px 6px; font-size: 10px; font-weight: bold; color: #ffffff; text-transform: uppercase; }
+.status-noua { background: #2a6fd1; }
+.status-confirmata { background: #7a4fc2; }
+.status-expediata { background: #d08400; }
+.status-livrata { background: #2e8b2e; }
+.status-anulata { background: #8a8a8a; }
+
+/* ---------- Pagina produsului ---------- */
+.produs-detalii { overflow: hidden; }
+.produs-detalii .imagine { float: left; width: 330px; margin-right: 16px; text-align: center; border: 1px solid #b6c1d1; padding: 8px; background: #fff; box-sizing: border-box; }
+.produs-detalii .imagine img { width: 300px; height: 225px; }
+.produs-detalii .informatii { overflow: hidden; }
+.caseta-cumparare { border: 2px solid #e8a04c; background: #fffaf0; padding: 10px; margin: 10px 0; }
+.stele { color: #e8a000; font-size: 14px; letter-spacing: 1px; }
+
+/* ---------- Bara de filtre ---------- */
+.filtre { background: #eef1f5; border: 1px solid #b6c1d1; padding: 8px; margin-bottom: 10px; }
+.filtre label { margin-right: 6px; white-space: nowrap; }
+.paginare { text-align: center; margin: 10px 0; }
+.paginare a, .paginare strong { display: inline-block; padding: 2px 7px; border: 1px solid #b6c1d1; margin: 0 1px; text-decoration: none; }
+.paginare strong { background: #2a4a80; color: #ffffff; border-color: #1f3a68; }
+
+/* ---------- Grafic statistici (bare simple, fara JavaScript) ---------- */
+table.grafic { border-collapse: collapse; width: 100%; height: 160px; }
+table.grafic td { vertical-align: bottom; text-align: center; padding: 0 2px; font-size: 9px; color: #555; }
+table.grafic .bara { background: #3a5a91; border: 1px solid #1f3a68; margin: 0 auto; width: 70%; min-height: 1px; }
+.bara-orizontala { background: #e8730c; height: 12px; display: block; }
+.indicator { float: left; width: 25%; box-sizing: border-box; padding: 0 5px 10px 0; }
+.indicator .interior { border: 1px solid #8fa0b8; background: #f7f9fb; padding: 8px; text-align: center; }
+.indicator .valoare { display: block; font-size: 18px; font-weight: bold; color: #1f3a68; }
+.indicatori { overflow: hidden; }
+
+/* ---------- Banner cookie ---------- */
+#banner-cookie {
+    background: #1b2c4a;
+    color: #ffffff;
+    padding: 10px;
+    border-top: 3px solid #e8730c;
+    text-align: center;
+}
+#banner-cookie a { color: #ffd39a; }
+#banner-cookie form { display: inline; }
+
+/* ---------- Subsol ---------- */
+#subsol { background: #2a3d5e; color: #c8d3e6; padding: 12px 10px; font-size: 11px; border-top: 3px solid #e8730c; overflow: hidden; }
+#subsol a { color: #ffffff; }
+#subsol .coloana { float: left; width: 25%; box-sizing: border-box; padding-right: 10px; }
+#subsol h4 { color: #ffd39a; font-size: 11px; text-transform: uppercase; margin-bottom: 5px; }
+#subsol ul { margin: 0; padding: 0; list-style: none; }
+#subsol .anpc { clear: both; text-align: center; padding-top: 10px; }
+#subsol .anpc a { display: inline-block; margin: 4px; }
+#subsol .anpc img { width: 200px; height: 50px; }
+#subsol .drepturi { clear: both; text-align: center; font-size: 10px; color: #8fa0b8; padding-top: 8px; border-top: 1px solid #3d5379; margin-top: 8px; }
+
+/* ---------- Administrare ---------- */
+body.admin #meniu { background: #3b3b3b; border-bottom-color: #c40000; }
+body.admin #meniu a { border-right-color: #222; border-left-color: #555; }
+body.admin #meniu a:hover, body.admin #meniu a.activ { background: #c40000; }
+.unelte { margin-bottom: 10px; overflow: hidden; }
+.unelte .dreapta { float: right; }
+
+/* ---------- Pagini legale ---------- */
+.text-legal h2 { margin-top: 14px; }
+.text-legal li { margin-bottom: 4px; }
+
+.clar { clear: both; }
+.centru { text-align: center; }
+.dreapta { text-align: right; }
+.ascuns { display: none; }
+
+/* =====================================================================
+ *  RESPONSIVE - adaptare pentru tablete si telefoane mobile
+ * ===================================================================== */
+@media (max-width: 800px) {
+    #pagina { border: 0; }
+    #antet .sigla, #antet .cautare { float: none; text-align: center; }
+    #antet .sigla img { margin: 0 auto; }
+    #antet .cautare input.text { width: 60%; }
+    #meniu li { float: none; }
+    #meniu a { border: 0; border-bottom: 1px solid #1f3a68; }
+    #coloana-stanga { float: none; width: auto; margin-right: 0; }
+    .produs-card { width: 50%; }
+    .produs-detalii .imagine { float: none; width: auto; margin-right: 0; }
+    .indicator { width: 50%; }
+    #subsol .coloana { width: 50%; margin-bottom: 8px; }
+    table.formular th { width: 110px; }
+}
+@media (max-width: 480px) {
+    body { font-size: 13px; }
+    #bara-sus .stanga { float: none; display: block; text-align: center; }
+    #bara-sus { text-align: center; }
+    .produs-card { width: 100%; }
+    .indicator { width: 100%; }
+    #subsol .coloana { width: 100%; float: none; }
+    table.formular, table.formular tbody, table.formular tr, table.formular th, table.formular td { display: block; width: auto; text-align: left; }
+    table.formular th { padding-bottom: 0; }
+    input.mediu, select.mediu { width: 100%; }
+}
+
+/* ---------- Tiparire (factura / confirmare) ---------- */
+@media print {
+    #bara-sus, #meniu, #coloana-stanga, #subsol, #banner-cookie, .unelte, .fara-tiparire, #antet .cautare { display: none; }
+    #pagina { width: auto; border: 0; }
+    body { background: #ffffff; }
+}
