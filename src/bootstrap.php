@@ -49,6 +49,7 @@ spl_autoload_register(function ($clasa) {
 });
 
 require DIR_SRC . '/functii.php';
+require DIR_SRC . '/vizual.php';
 
 date_default_timezone_set('Europe/Bucharest');
 mb_internal_encoding_sigur();
