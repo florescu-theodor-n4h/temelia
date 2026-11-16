@@ -38,11 +38,11 @@ class Produse
      */
     public static function cauta(array $filtre, $limita = 12, $deplasare = 0)
     {
-        $conditii = array('p.activ = TRUE');
+        $conditii = array('p.activ = 1');
         $param = array();
 
         if (!empty($filtre['cautare'])) {
-            $conditii[] = '(LOWER(p.nume) LIKE ? OR LOWER(p.cod_sku) LIKE ?)';
+            $conditii[] = "(LOWER(p.nume) LIKE ? ESCAPE '!' OR LOWER(p.cod_sku) LIKE ? ESCAPE '!')";
             $termen = '%' . self::escapeLike(strtolower($filtre['cautare'])) . '%';
             $param[] = $termen;
             $param[] = $termen;
@@ -83,14 +83,17 @@ class Produse
     }
 
     /**
-     * Escapeaza caracterele speciale ale operatorului LIKE (%, _ si \).
+     * Escapeaza caracterele speciale ale operatorului LIKE (%, _ si !).
+     * Se foloseste '!' drept caracter de escapare, declarat explicit prin
+     * clauza ESCAPE, deoarece motoarele SQL au comportamente implicite
+     * diferite pentru caracterul '\\'.
      *
      * @param string $text
      * @return string
      */
     private static function escapeLike($text)
     {
-        return strtr($text, array('\\' => '\\\\', '%' => '\\%', '_' => '\\_'));
+        return strtr($text, array('!' => '!!', '%' => '!%', '_' => '!_'));
     }
 
     /**
@@ -102,7 +105,7 @@ class Produse
     public static function recomandate($limita = 8)
     {
         return Baza::toate(
-            'SELECT * FROM produse WHERE activ = TRUE AND recomandat = TRUE
+            'SELECT * FROM produse WHERE activ = 1 AND recomandat = 1
               ORDER BY creat_la DESC LIMIT ' . (int) $limita
         );
     }
@@ -115,7 +118,7 @@ class Produse
      */
     public static function noutati($limita = 4)
     {
-        return Baza::toate('SELECT * FROM produse WHERE activ = TRUE ORDER BY creat_la DESC LIMIT ' . (int) $limita);
+        return Baza::toate('SELECT * FROM produse WHERE activ = 1 ORDER BY creat_la DESC LIMIT ' . (int) $limita);
     }
 
     /**
@@ -193,7 +196,8 @@ class Produse
         $id = (int) $produs['id'];
         $rezultat = Baza::toate(
             'SELECT p.* FROM produse_asociate a JOIN produse p ON p.id = a.asociat_id
-              WHERE a.produs_id = ? AND p.activ = TRUE ORDER BY p.stoc > 0 DESC, p.nume LIMIT ' . (int) $limita,
+              WHERE a.produs_id = ? AND p.activ = 1
+              ORDER BY CASE WHEN p.stoc > 0 THEN 0 ELSE 1 END, p.nume LIMIT ' . (int) $limita,
             array($id)
         );
 
@@ -206,8 +210,8 @@ class Produse
                    FROM comenzi_produse a
                    JOIN comenzi_produse b ON b.comanda_id = a.comanda_id AND b.produs_id <> a.produs_id
                    JOIN produse p ON p.id = b.produs_id
-                  WHERE a.produs_id = ? AND p.activ = TRUE AND p.id NOT IN ($marcaje)
-                  GROUP BY p.id ORDER BY frecventa DESC LIMIT " . (int) ($limita - count($rezultat)),
+                  WHERE a.produs_id = ? AND p.activ = 1 AND p.id NOT IN ($marcaje)
+                  GROUP BY p.id ORDER BY frecventa DESC, p.id LIMIT " . (int) ($limita - count($rezultat)),
                 array_merge(array($id), $excluse)
             );
             $rezultat = array_merge($rezultat, $suplimentare);
@@ -218,8 +222,8 @@ class Produse
             $excluse = array_merge(array($id), array_map('intval', array_column($rezultat, 'id')));
             $marcaje = implode(',', array_fill(0, count($excluse), '?'));
             $dinCategorie = Baza::toate(
-                "SELECT * FROM produse WHERE categorie_id = ? AND activ = TRUE AND id NOT IN ($marcaje)
-                  ORDER BY recomandat DESC, stoc > 0 DESC LIMIT " . (int) ($limita - count($rezultat)),
+                "SELECT * FROM produse WHERE categorie_id = ? AND activ = 1 AND id NOT IN ($marcaje)
+                  ORDER BY recomandat DESC, CASE WHEN stoc > 0 THEN 0 ELSE 1 END, id LIMIT " . (int) ($limita - count($rezultat)),
                 array_merge(array((int) $produs['categorie_id']), $excluse)
             );
             $rezultat = array_merge($rezultat, $dinCategorie);
@@ -235,7 +239,7 @@ class Produse
     public static function categorii()
     {
         return Baza::toate(
-            'SELECT c.*, (SELECT COUNT(*) FROM produse p WHERE p.categorie_id = c.id AND p.activ = TRUE) AS numar_produse
+            'SELECT c.*, (SELECT COUNT(*) FROM produse p WHERE p.categorie_id = c.id AND p.activ = 1) AS numar_produse
                FROM categorii c ORDER BY c.ordine, c.nume'
         );
     }
@@ -284,7 +288,7 @@ class Produse
         $param = array();
         $where = '';
         if ($cautare !== '') {
-            $where = 'WHERE LOWER(p.nume) LIKE ? OR LOWER(p.cod_sku) LIKE ?';
+            $where = "WHERE LOWER(p.nume) LIKE ? ESCAPE '!' OR LOWER(p.cod_sku) LIKE ? ESCAPE '!'";
             $t = '%' . self::escapeLike(strtolower($cautare)) . '%';
             $param = array($t, $t);
         }
@@ -307,7 +311,7 @@ class Produse
         $valori = array(
             (int) $date['categorie_id'], $date['cod_sku'], $date['nume'], $date['slug'], $date['descriere'],
             $date['pret'], $date['pret_vechi'], (int) $date['stoc'], $date['unitate'], $date['greutate_kg'],
-            $date['imagine'], $date['recomandat'] ? 't' : 'f', $date['activ'] ? 't' : 'f',
+            $date['imagine'], $date['recomandat'] ? 1 : 0, $date['activ'] ? 1 : 0,
         );
         if ($id > 0) {
             $valori[] = $id;
@@ -319,12 +323,11 @@ class Produse
             );
             return $id;
         }
-        return (int) Baza::valoare(
-            'INSERT INTO produse (categorie_id, cod_sku, nume, slug, descriere, pret, pret_vechi, stoc, unitate,
-                                  greutate_kg, imagine, recomandat, activ)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id',
-            $valori
-        );
+        $coloane = array('categorie_id', 'cod_sku', 'nume', 'slug', 'descriere', 'pret', 'pret_vechi', 'stoc',
+            'unitate', 'greutate_kg', 'imagine', 'recomandat', 'activ');
+        $rand = array_combine($coloane, $valori);
+        $rand['creat_la'] = Baza::acum();
+        return Baza::insereaza('produse', $rand);
     }
 
     /**
@@ -389,7 +392,7 @@ class Produse
     {
         $folosit = (int) Baza::valoare('SELECT COUNT(*) FROM comenzi_produse WHERE produs_id = ?', array((int) $id));
         if ($folosit > 0) {
-            Baza::executa('UPDATE produse SET activ = FALSE WHERE id = ?', array((int) $id));
+            Baza::executa('UPDATE produse SET activ = 0 WHERE id = ?', array((int) $id));
             return 'dezactivat';
         }
         Baza::executa('DELETE FROM produse WHERE id = ?', array((int) $id));

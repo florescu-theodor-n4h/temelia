@@ -29,11 +29,14 @@ class Autentificare
         if (self::dupaEmail($email)) {
             throw new RuntimeException('Exista deja un cont asociat acestei adrese de e-mail.');
         }
-        return (int) Baza::valoare(
-            'INSERT INTO utilizatori (nume, email, parola_hash, telefon, rol)
-             VALUES (?, ?, ?, ?, \'client\') RETURNING id',
-            array($nume, $email, password_hash($parola, PASSWORD_DEFAULT), $telefon)
-        );
+        return Baza::insereaza('utilizatori', array(
+            'nume'        => $nume,
+            'email'       => $email,
+            'parola_hash' => password_hash($parola, PASSWORD_DEFAULT),
+            'telefon'     => $telefon,
+            'rol'         => 'client',
+            'creat_la'    => Baza::acum(),
+        ));
     }
 
     /**
