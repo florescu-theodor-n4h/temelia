@@ -1,0 +1,12 @@
+# Fisiere de configurare locala (contin parole) - nu se versioneaza
+src/config.local.php
+
+# Imagini incarcate din panoul de administrare
+public/img/incarcate/*
+!public/img/incarcate/.gitkeep
+
+# Jurnale si fisiere temporare
+jurnal/*.log
+*.swp
+.DS_Store
+Thumbs.db
