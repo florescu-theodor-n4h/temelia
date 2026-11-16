@@ -136,7 +136,7 @@ require DIR_SRC . '/sabloane/antet.php';
     <div class="corp">
         <table class="date">
             <?php foreach ($specificatii as $i => $s): ?>
-            <tr<?php echo $i % 2 ? ' class="impar"' : ''; ?>><th style="width:35%"><?php echo e($s['nume']); ?></th><td><?php echo e($s['valoare']); ?></td></tr>
+            <tr<?php echo $i % 2 ? ' class="impar"' : ''; ?>><th class="col-eticheta"><?php echo e($s['nume']); ?></th><td><?php echo e($s['valoare']); ?></td></tr>
             <?php endforeach; ?>
             <tr><th>Greutate de transport</th><td><?php echo e(number_format((float) $produs['greutate_kg'], 2, ',', '.')); ?> kg / <?php echo e($produs['unitate']); ?></td></tr>
         </table>
