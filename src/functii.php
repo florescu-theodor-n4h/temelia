@@ -299,3 +299,24 @@ function jurnal($mesaj)
     $linie = '[' . date('Y-m-d H:i:s') . '] ' . $mesaj . PHP_EOL;
     @file_put_contents(DIR_RADACINA . '/jurnal/aplicatie.log', $linie, FILE_APPEND | LOCK_EX);
 }
+
+/**
+ * Verifica daca vizitatorul curent are dreptul sa vada o comanda:
+ * administratorii, titularul contului care a plasat comanda sau
+ * vizitatorul care a plasat-o in sesiunea curenta (comanda fara cont).
+ *
+ * @param array $comanda
+ * @return bool
+ */
+function poate_vedea_comanda(array $comanda)
+{
+    if (Autentificare::esteAdmin()) {
+        return true;
+    }
+    $u = Autentificare::utilizator();
+    if ($u && (int) $comanda['utilizator_id'] === (int) $u['id']) {
+        return true;
+    }
+    $sesiune = isset($_SESSION['comenzi_sesiune']) ? (array) $_SESSION['comenzi_sesiune'] : array();
+    return in_array($comanda['numar'], $sesiune, true);
+}
