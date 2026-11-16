@@ -1,0 +1,19 @@
+<?php
+/**
+ * Exemplu de configurare locala.
+ *
+ * Copiati acest fisier in src/config.local.php si completati valorile
+ * corespunzatoare mediului dumneavoastra. Fisierul copiat nu se
+ * versioneaza (vezi .gitignore).
+ */
+return array(
+    'db' => array(
+        'host'   => '127.0.0.1',
+        'port'   => '5432',
+        'nume'   => 'temelia',
+        'user'   => 'temelia',
+        'parola' => 'parola-dumneavoastra',
+    ),
+    'url_baza' => 'http://localhost:8000',
+    'depanare' => true,
+);
