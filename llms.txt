@@ -1,0 +1,36 @@
+# TEMELIA
+
+> Magazin online de materiale de constructii (proiect didactic): PHP 7+ fara framework si fara dependinte, PDO cu SQLite implicit (schema portabila PostgreSQL/MySQL), interfata XHTML 1.0 Transitional fara JavaScript, comentarii si commit-uri in limba romana. Regulile pentru agenti AI sunt in AGENTS.md.
+
+Fisier de orientare pentru modele de limbaj (conventia llms.txt). Pornire rapida: `php sql/instalare.php`, apoi `php -S localhost:8000 -t public`; teste: `php teste/ruleaza.php`. Nu porniti PostgreSQL pe masina de dezvoltare.
+
+## Reguli si documentatie
+
+- [AGENTS.md](AGENTS.md): reguli obligatorii, arhitectura, securitate, stil de cod (sursa unica de reguli)
+- [README.md](README.md): instalare, conturi de test, cerinte implementate, functionalitati A1-A16
+- [CLAUDE.md](CLAUDE.md): precizari pentru Claude Code
+- [.github/copilot-instructions.md](.github/copilot-instructions.md): rezumat pentru GitHub Copilot
+
+## Nucleu (src/)
+
+- [src/bootstrap.php](src/bootstrap.php): initializare, autoload, sesiune securizata, antete CSP
+- [src/Baza.php](src/Baza.php): acces PDO independent de motorul SQL
+- [src/Produse.php](src/Produse.php): catalog, cautare, filtre, recomandari
+- [src/Comenzi.php](src/Comenzi.php): plasare atomica a comenzii, statusuri, statistici
+- [src/Cos.php](src/Cos.php): cosul de cumparaturi si rezumatul financiar
+- [src/Calculator.php](src/Calculator.php): calcule financiare pure (TVA, cupoane, reduceri)
+- [src/CurierShim.php](src/CurierShim.php): shim pentru API-ul de curierat RapidCurier
+- [src/PlataDummy.php](src/PlataDummy.php): procesator de plati cu cardul de test
+- [src/functii.php](src/functii.php): utilitare (escapare, CSRF, formatare)
+
+## Baza de date
+
+- [sql/schema.sql](sql/schema.sql): schema portabila
+- [sql/date_initiale.sql](sql/date_initiale.sql): categorii, produse, cupoane
+- [sql/instalare.php](sql/instalare.php): script de instalare
+
+## Optional
+
+- [teste/ruleaza.php](teste/ruleaza.php): teste automate fara dependinte
+- [public/api/produse.php](public/api/produse.php): API REST produse
+- [public/api/comenzi.php](public/api/comenzi.php): API REST comenzi (cheie API)
