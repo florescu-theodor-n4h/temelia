@@ -56,7 +56,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <?php if ($utilizatorCurent['rol'] === 'admin'): ?>
             <a href="<?php echo e(url('admin/index.php')); ?>">[Administrare]</a>
         <?php endif; ?>
-        <a href="<?php echo e(url('cont/deconectare.php')); ?>">Iesire</a>
+        <a href="<?php echo e(url('cont/deconectare.php', array('csrf' => csrf_jeton()))); ?>">Iesire</a>
     <?php else: ?>
         <a href="<?php echo e(url('cont/autentificare.php')); ?>">Autentificare</a>
         <a href="<?php echo e(url('cont/inregistrare.php')); ?>">Cont nou</a>

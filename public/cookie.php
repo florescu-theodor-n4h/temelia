@@ -11,21 +11,6 @@
  */
 require __DIR__ . '/../src/bootstrap.php';
 
-/**
- * Valideaza adresa de intoarcere: sunt acceptate doar cai locale,
- * pentru a preveni redirectionarile deschise (open redirect).
- *
- * @param string $adresa
- * @return string
- */
-function adresa_locala($adresa)
-{
-    if ($adresa === '' || $adresa[0] !== '/' || (isset($adresa[1]) && ($adresa[1] === '/' || $adresa[1] === '\\'))) {
-        return url('index.php');
-    }
-    return $adresa;
-}
-
 $optiuniCookie = array('expires' => 0, 'path' => RADACINA_WEB, 'httponly' => true, 'samesite' => 'Lax');
 
 if (param('reseteaza', '', $_GET) === '1') {

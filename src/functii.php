@@ -320,3 +320,17 @@ function poate_vedea_comanda(array $comanda)
     $sesiune = isset($_SESSION['comenzi_sesiune']) ? (array) $_SESSION['comenzi_sesiune'] : array();
     return in_array($comanda['numar'], $sesiune, true);
 }
+/**
+ * Valideaza adresa de intoarcere: sunt acceptate doar cai locale,
+ * pentru a preveni redirectionarile deschise (open redirect).
+ *
+ * @param string $adresa
+ * @return string
+ */
+function adresa_locala($adresa)
+{
+    if ($adresa === '' || $adresa[0] !== '/' || (isset($adresa[1]) && ($adresa[1] === '/' || $adresa[1] === '\\'))) {
+        return url('index.php');
+    }
+    return $adresa;
+}
