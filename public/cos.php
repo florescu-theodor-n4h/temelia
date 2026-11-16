@@ -106,7 +106,7 @@ require DIR_SRC . '/sabloane/antet.php';
     <p><input type="submit" class="buton" value="Actualizeaza cantitatile" /> <small>Pentru a elimina un produs, setati cantitatea 0 sau folositi butoanele de mai jos.</small></p>
 </form>
 
-<p class="mic">Eliminare rapida:
+<div class="mic">Eliminare rapida:
 <?php foreach ($linii as $l): ?>
     <form method="post" action="<?php echo e(url('cos.php')); ?>" class="in-linie">
         <?php echo csrf_camp(); ?>
@@ -115,7 +115,8 @@ require DIR_SRC . '/sabloane/antet.php';
         <input type="submit" class="buton" value="x <?php echo e($l['produs']['cod_sku']); ?>" title="Elimina <?php echo e($l['produs']['nume']); ?>" />
     </form>
 <?php endforeach; ?>
-</p>
+</div>
+<br />
 
 <div class="caseta">
     <div class="titlu">Cod de reducere</div>
